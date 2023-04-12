@@ -41,12 +41,3 @@ class Student:
                     return False
             return True
         return False
-
-    def reload_from_json(self, json):
-        """
-        reload_from_json
-        sets student attributes from a json string
-        """
-        for key in json:
-            if key in self.__dict__.keys():
-                self.__dict__[key] = json[key]
