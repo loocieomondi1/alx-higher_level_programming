@@ -1,24 +1,32 @@
 #!/usr/bin/python3
 """
-Improve the files model_city.py and model_state.py, and save
-them as relationship_city.py and relationship_state.py
+This script prints all City objects
+from the database `hbtn_0e_14_usa`.
 """
-import sys
-from sqlalchemy.orm import Session
-from sqlalchemy import create_engine
-from relationship_state import State
-from relationship_city import City, Base
 
+from sys import argv
+from relationship_state import Base, State
+from relationship_city import City
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 if __name__ == "__main__":
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                           .format(sys.argv[1], sys.argv[2], sys.argv[3]),
-                           pool_pre_ping=True)
+    """
+    Access to the database and get the cities
+    from the database.
+    """
+
+    db_uri = 'mysql+mysqldb://{}:{}@localhost:3306/{}'.format(
+        argv[1], argv[2], argv[3])
+    engine = create_engine(db_uri)
     Base.metadata.create_all(engine)
-    session = Session(engine)
-    s1 = State(name='California')
-    c1 = City(name='San Francisco')
-    s1.cities.append(c1)
-    session.add_all([c1, s1])
+    Session = sessionmaker(bind=engine)
+
+    session = Session()
+    cal_state = State(name='California')
+    sfr_city = City(name='San Francisco')
+    cal_state.cities.append(sfr_city)
+
+    session.add(cal_state)
     session.commit()
     session.close()
