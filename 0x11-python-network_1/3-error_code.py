@@ -1,22 +1,16 @@
 #!/usr/bin/python3
-"""Takes in a URL, sends a request to the URL and
-displays the body of the response (decoded in utf-8).
-
-In addition, it handles HTTPError exceptions to print
-the HTTP Status Code, if an error occurs.
 """
-
-from sys import argv
-from urllib.request import Request, urlopen
-from urllib.parse import urlencode
-from urllib.error import HTTPError
-
+Take in a URL, send a request to URL, and dispaly body of response decoded in
+utf-8. Manage urllib's error exceptions.
+"""
+import sys
+import urllib.request
+import urllib.error
 
 if __name__ == "__main__":
-    req = Request(argv[1])
-
+    req = urllib.request.Request(sys.argv[1])
     try:
-        with urlopen(req) as res:
+        with urllib.request.urlopen(req) as res:
             print(res.read().decode('utf-8'))
-    except HTTPError as ex:
-        print('Error code:', ex.code)
+    except urllib.error.URLError as e:
+        print("Error code: {}".format(e.code))
