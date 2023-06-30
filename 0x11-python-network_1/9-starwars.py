@@ -1,28 +1,15 @@
 #!/usr/bin/python3
-"""script for posting data to star wars api
 """
+Use requests package to make a get request to the swapi api.
+Use string argument as search value of request. Body response must
+be JSON and formatted to a Python dictionary.
+"""
+import sys
+import requests
+
 if __name__ == "__main__":
-    import requests
-    import sys
-    url = "https://swapi.co/api/people/"
-    search_url = url + "?search="
-    if len(sys.argv) > 1:
-        search_url += sys.argv[1]
-    else:
-        search_url = url
-    response = requests.get(search_url)
-    if response.status_code != requests.codes.ok or len(response.text) <= 0:
-        print('No result')
-        sys.exit()
-    else:
-        try:
-            my_obj = response.json()
-            if len(my_obj) == 0:
-                print('No result')
-                sys.exit()
-            print('Number of results: {}'.format(my_obj.get('count')))
-            results = my_obj.get('results')
-            for result in results:
-                print(result.get('name'))
-        except ValueError as invalid_json:
-            print('Not a valid JSON')
+    url = "https://swapi.co/api/people/?search={}".format(sys.argv[1])
+    r = requests.get(url).json()
+    print("Number of result: {}".format(r['count']))
+    for c in r['results']:
+        print(c['name'])
